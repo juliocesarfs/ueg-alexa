@@ -1,0 +1,12 @@
+export const config = {
+    type: "service_account",
+    projectId: "botueg-jntg",
+    private_key_id: "12d8fd5e0be63756fd23db65004c33cc1c39e24c",
+    private_key: "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDIH4fUkS7LUisB\nO7StW9EoeD/c9Sxw3h6uByOroKqutKR9LI4guLe9M4aHOffkfveiwUekH8S/TsWm\n29X2DK1szhMN0/sr8raFWQroKFzDaI9u2/IktAsZI579oFCKeXsCXNqlV6M0qhh+\n5EUyRN3etnFyGFLD7A6lF4KriJb35ClCbrZ9I+p92jLqR+Ike4/wSCCwVvbduZjx\nmYNxLVMEtSsi8AWh9iKebuz05Js9IjGYy6l+TGySiXnAXMpvgMqtYT3NvzMTJjEd\nes8EWvlNGh93dyObrFjH06Ay3r7g0d/vTtA7qSV8BymWo8srNMMdIGwNaPPiEsy2\nAL3ZJuurAgMBAAECggEAG5c5R2XC0VZhRnjAVrxXcGBv0ZtdxqvhB/ZFBTcQASk3\nmmhnqfw9nNC7Re6IjlCw/JfwNCELI6MNHg2mCJfD20HoH5pvwSXj4yudFNfnvisu\nx0Z8snG+K/ecxnPxVr4b5v39SRl1j1+6I9h978nN2xRFPMk8s/VaKYm9wr+ArOlh\n25OtfqsJv1rmkQOIxOexWK8DYnHOBRBO4GgrlnlcH9s/EC6ny6Pm9U1RMVrKxFG+\nwK4f2ZSkBUdBtamxhouDFon7YXOA/jB/EUxDxLAmYzuoJhfXLkCjgbqWc0LnJiXB\nRJVYQP36IrBxRFpsYkmClyOeuyMq+5I/Lj1P1UN3tQKBgQD3ewj9ufZZG8NdBHPW\nxBCN/wn0HOfIupUWCah3If4HxM5ieZPPJmjXXVXDxDkTLVwUZAmeQKG0kBsNEG80\nwiQxB7z4nvyxycEMRDvgBzo2GXyFfL48RL8p08boF4Klxu4+8mf0G0aV67aqD1js\nLjnAseMD1s+hKngZtoQa59rRFQKBgQDPAyZlaXnMpN16bZh+yqNpLQ6hQ+nKexP3\nfSsk+AVNVxEvnEOpxiy0fYKLYueCIw3O02kM0ltpqGHYXi1FbqkQ+52AQhmhLw9m\n5d9vtJzfJ7byy5dV+d92iiOxIIx+KZL0NKEGP2caxYyisfTC4+/6Mr0QTccl2HpW\nDZGEAEp5vwKBgD+G5rTy4ojXNpwPA4lSxQkeObjfHqSJOLHygrsqD6KA45WlrcqU\nCn+WJujc2uXQU/2r/EgSQTAvebIt0M4TM+UeHmUXsrgUmSiD73a/hDLU8gD2F4Mz\nBns/MKTtPA0/9nJUGVkxEzpyym33CJV//DU5tJOMtbmiRDgdgOXDNIlNAoGBALW0\naR54361ORQ1yZ3lbeuYV45KP3wWY1OTWnGk9vsGtG+uzePzrc1AWHuEkNltXU4Zo\nsPvNJOnwH7pgp9IbGRFMGmp7Gq4NdbJ3MZGGcm+6F260X6jaxFfzVvLhxA/1hAUQ\nsQqf2mt4XUJte48ZrgnqQWOvMY+5nWAtVr4L11NXAoGBALmI88c8Czg+z4MrXm88\ndudd7UzTswrCFduvy2s7Co3bVYo0kKOi/6l+6NbIgeERZ8WK9Yiu5YPhi5y5B5N6\nZ0MeAlm3255e0vmu21ZD748rfK9hbxBCK14qIxv+JhhMNXK4iCZo9l5mrzur8si8\nNH0B/luHURo/lzmUfXVcJQPz\n-----END PRIVATE KEY-----\n",
+    client_email: "julio-dev@botueg-jntg.iam.gserviceaccount.com",
+    client_id: "109047700074572421728",
+    auth_uri: "https://accounts.google.com/o/oauth2/auth",
+    token_uri: "https://oauth2.googleapis.com/token",
+    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+    client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/julio-dev%40botueg-jntg.iam.gserviceaccount.com"
+}
