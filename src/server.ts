@@ -1,17 +1,17 @@
-import { DialogflowSession } from './lib/dialogflow-session'
-import { v4 as uuidv4 } from 'uuid';
+import express from 'express';
 
-const sessionId = uuidv4();
+import { alexaApp } from './routes/alexaRoute';
 
-const text = 'aulas hoje';
+const app = express();
+const port = 3333;
 
-const dialogflowSession = new DialogflowSession(sessionId);
-
-console.log(getResponse());
+app.use('/alexa', alexaApp);
 
 
-async function getResponse() {
-    const response = await dialogflowSession.queryText(text);
 
-    return response;
-}
+
+app.listen(port, () => {
+    console.log('Server is running')
+});
+
+

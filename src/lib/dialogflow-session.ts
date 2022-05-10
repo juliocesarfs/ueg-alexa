@@ -22,7 +22,7 @@ export class DialogflowSession {
 
     const projectId = config.projectId;
 
-    this.sessionPath = new SessionsClient({projectId, credts}).projectAgentSessionPath(projectId, sessionId);
+    this.sessionPath = new SessionsClient().projectAgentSessionPath(projectId, sessionId);
   }
 
   /**
@@ -32,7 +32,7 @@ export class DialogflowSession {
    */
   public async queryText<T = any>(text: string) {
     // create the session client
-    const sessionClient = new SessionsClient({apiEndpoint: `${this.location}-dialogflow.googleapis.com`});
+    const sessionClient = new SessionsClient({apiEndpoint: `dialogflow.googleapis.com`});
 
     try {
         const dialogflowResponse = await sessionClient.detectIntent({
@@ -40,6 +40,7 @@ export class DialogflowSession {
             queryInput: {
               text: {
                 text: text,
+                languageCode: 'pt-BR'
               },
             },
           });
