@@ -5,7 +5,7 @@ const HorarioAulasIntentHandler = {
         return request.type === 'IntentRequest' && request.intent.name === 'HorarioAulasIntent';
     },
     handle(handlerInput) {
-        const speechText = 'Você não tem aulas hoje seu inutil, Serafim seu fraco não desista';
+        const speechText = 'Você não tem aulas hoje';
 
         return handlerInput.responseBuilder
             .speak(speechText)

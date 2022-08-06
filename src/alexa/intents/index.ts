@@ -1,5 +1,5 @@
 import { SkillBuilders, DefaultApiClient } from 'ask-sdk-core';
-import { launchRequestHandler } from './launch/LaunchRequestHandler';
+import { launchRequestHandler } from './launch/requests/LaunchRequestHandler';
 
 const createSkill = () => {
     const skillbuilder = SkillBuilders.custom();
