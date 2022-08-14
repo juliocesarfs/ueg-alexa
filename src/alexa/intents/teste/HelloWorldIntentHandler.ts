@@ -1,9 +1,4 @@
-import { SkillBuilders, DefaultApiClient } from 'ask-sdk-core';
-import { launchRequestHandler } from './launch/requests/LaunchRequestHandler';
-import { horarioAulasIntent } from './horarioAulas/requests/horarioAulasIntent';
-
 import Alexa from 'ask-sdk-core';
-
 
 const HelloWorldIntentHandler = {
     canHandle(handlerInput) {
@@ -21,16 +16,4 @@ const HelloWorldIntentHandler = {
     }
 };
 
-const createSkill = () => {
-    const skillbuilder = SkillBuilders.custom();
-    return skillbuilder.addRequestHandlers(
-        launchRequestHandler,
-        horarioAulasIntent,
-        HelloWorldIntentHandler
-    )
-        .withApiClient(new DefaultApiClient())
-        .withCustomUserAgent('UEGbot/v1')
-        .create()
-}
-
-export { createSkill };
+export { HelloWorldIntentHandler }

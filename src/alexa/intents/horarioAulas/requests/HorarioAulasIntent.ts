@@ -1,17 +1,27 @@
-const HorarioAulasIntentHandler = {
-    canHandle(handlerInput) {
-        const { request } = handlerInput.requestEnvelope;
-        console.log(request);
-        return request.type === 'IntentRequest' && request.intent.name === 'HorarioAulasIntent';
-    },
-    handle(handlerInput) {
+import { HandlerInput } from "ask-sdk-core";
+import { CustomSkillRequestHandler } from "ask-sdk-core/dist/dispatcher/request/handler/CustomSkillRequestHandler";
+import { Response } from "ask-sdk-model";
+
+
+
+class HorarioAulasIntentHandler implements CustomSkillRequestHandler {
+
+    canHandle(input: HandlerInput): boolean | Promise<boolean> {
+        return true;
+    }
+
+    handle(input: HandlerInput): Response | Promise<Response> {
+        console.log('SEXO');
+
+        const filter = {
+
+        }
         const speechText = 'Você não tem aulas hoje';
 
-        return handlerInput.responseBuilder
+        return input.responseBuilder
             .speak(speechText)
-            .reprompt('teste', speechText)
             .getResponse();
     }
 }
 
-export { HorarioAulasIntentHandler };
+export const horarioAulasIntent = new HorarioAulasIntentHandler();

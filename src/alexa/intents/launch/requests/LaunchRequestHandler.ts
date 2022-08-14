@@ -10,7 +10,9 @@ class LaunchRequestHandler implements CustomSkillRequestHandler {
     }
 
     handle(input: HandlerInput): Response | Promise<Response> {
-        let speechText = 'Olá, bem vindo ao uegênio! O que você gostaria de fazer?';
+        let speechText = 'Uegênio está aberto';
+
+        console.log('FODASDASDASDASD')
 
         return input.responseBuilder
             .speak(speechText)
@@ -18,4 +20,4 @@ class LaunchRequestHandler implements CustomSkillRequestHandler {
     }
 }
 
-export const launchRequestHandler =  new LaunchRequestHandler();
+export const launchRequestHandler = new LaunchRequestHandler();
