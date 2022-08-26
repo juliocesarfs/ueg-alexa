@@ -1,9 +1,10 @@
 import express from 'express';
+require('dotenv').config();
 
 import { alexaApp } from './routes/alexaRoute';
 
 const app = express();
-const port = 3333;
+const port = process.env.PORT || 3333;
 
 app.use('/alexa', alexaApp);
 

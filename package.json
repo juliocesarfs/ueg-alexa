@@ -19,6 +19,7 @@
     "ask-sdk-model": "^1.38.1",
     "axios": "^0.27.2",
     "dialogflow": "^1.2.0",
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "ngrok": "^4.3.1",
     "ts-node": "^10.9.1",
