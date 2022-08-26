@@ -3,7 +3,7 @@ import axios from 'axios'
 class UegenioApi {
 
     api = axios.create({
-        baseURL: 'http://localhost:5001'
+        baseURL: 'https://uegenio-api.herokuapp.com'
     })
 
 
