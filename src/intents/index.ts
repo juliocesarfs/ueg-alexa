@@ -4,6 +4,7 @@ import { SessionEndedRequest, HelpIntent, CancelAndStopIntentHandler, UnhandledI
 import { HelloWorldIntentHandler } from './HelloWorldIntent';
 import { LaunchRequest } from './LaunchIntent';
 import { HorarioAulasIntentHandler } from './HorarioAulasIntent';
+import { CadastroIntentHandler } from './CadastroIntent';
 
 const createSkill = () => {
     const skillbuilder = SkillBuilders.custom();
@@ -11,6 +12,7 @@ const createSkill = () => {
         LaunchRequest,
         HelloWorldIntentHandler,
         HorarioAulasIntentHandler,
+        CadastroIntentHandler,
         SessionEndedRequest,
         HelpIntent,
         CancelAndStopIntentHandler,
