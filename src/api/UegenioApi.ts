@@ -21,6 +21,18 @@ class UegenioApi {
         return result;
     }
 
+    async registerClass(filter: any) {
+        const result = await this.api({
+            method: 'post',
+            url: '/users',
+            data: {
+                ...filter
+            }
+        });
+
+        return result;
+    }
+
 }
 
 export { UegenioApi }
