@@ -1,6 +1,6 @@
 import express from 'express';
 import { ExpressAdapter } from 'ask-sdk-express-adapter';
-import { createSkill } from '../alexa/intents';
+import { createSkill } from '../intents';
 
 const alexaApp = express();
 

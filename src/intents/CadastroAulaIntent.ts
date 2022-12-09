@@ -1,15 +1,19 @@
 import { UegenioApi } from "../api/UegenioApi";
+import { HandlerInput } from 'ask-sdk-core';
+
 
 const uegenioApi = new UegenioApi();
 
-const CadastroIntentHandler = {
+const CadastroAulaIntentHandler = {
     canHandle(handlerInput) {
 
-        const { request } = handlerInput.requestEnvelope;
-        return request.type === 'IntentRequest' && request.intent.name === 'CadastroIntent';
-    },
-    async handle(handlerInput) {
 
+        const { request } = handlerInput.requestEnvelope;
+        return request.type === 'IntentRequest' && request.intent.name === 'CadastroAulaIntent';
+    },
+    async handle(handlerInput: HandlerInput) {
+
+        try {/*
         const { request } = handlerInput.requestEnvelope;
 
         const slots = request.intent.slots;
@@ -27,13 +31,21 @@ const CadastroIntentHandler = {
         } else if (!requestResult) {
             text = 'Ocorreu um erro interno, tente novamente mais tarde'
         }
+        */
 
+            const question = ' Voce deseja se cadastrar em Banco de Dados 1 ou Banco de dados 2?';
 
-        return handlerInput.responseBuilder
-            .speak('speechText')
-            .reprompt('teste')
-            .getResponse();
+            handlerInput.responseBuilder
+                .speak('speechText')
+            // .listen(question)
+
+            //handlerInput.responseBuilder.
+
+            return handlerInput.responseBuilder.getResponse();
+        } catch (err: any) {
+            console.log(err.message);
+        }
     }
 }
 
-export { CadastroIntentHandler };
+export { CadastroAulaIntentHandler };
