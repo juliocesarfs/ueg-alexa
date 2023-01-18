@@ -71,10 +71,8 @@ const HorarioAulasIntentHandler = {
 
 
                         })
-                        console.log('houasudas d asdhnasudhasudashduasdashud');
-                        console.log(hours);
+
                         if (!hours) {
-                            console.log('ENTRA AQUI PELO AMOR DE DEUS')
                             const disciplina = slots.disciplina.resolutions.resolutionsPerAuthority[0].values[0].value.name ? slots.disciplina.resolutions.resolutionsPerAuthority[0].values[0].value.name : slots.disciplina.value
                             console.log(disciplina);
 
@@ -108,7 +106,7 @@ const HorarioAulasIntentHandler = {
 
 
             handlerInput.responseBuilder
-                .speak(`nao cai aqui pfvr`)
+                .speak(`nada`)
                 .reprompt()
                 .getResponse();
 
