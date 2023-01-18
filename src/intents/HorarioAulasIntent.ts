@@ -17,81 +17,109 @@ const HorarioAulasIntentHandler = {
         return request.type === 'IntentRequest' && request.intent.name === 'HorarioAulasIntent';
     },
     async handle(handlerInput) {
-        const { request } = handlerInput.requestEnvelope;
 
+        const { request } = handlerInput.requestEnvelope;
         const slots = request.intent.slots;
 
         const date = slots.date.value ? new Date(slots.date.value) : new Date(request.timestamp);
-        console.log(date);
-        console.log(date.getDay());
-        console.log(date.getHours())
 
-        const weekDay = slots.date.value ? weekday[date.getDay() + 1] : weekday[date.getDay()]
-        const dataApi = await uegenioApi.getClassrooms({
-            alexaId: 'd214a2ff-f9b3-430d-8bcf-6e19d57dd3fc',
-            weekDay,
-            time: slots.horario.value,
-            subjectName: slots.disciplina.value,
-        });
-        // weekday[date.getDay() + 1]
+        const weekDay = slots.date.value ? weekday[date.getDay() + 1] : weekday[date.getDay()];
 
-        let classrooms = []
-        if (!slots.disciplina.value) {
-            dataApi.data.classrooms.forEach(classroom => {
 
-                let startHour = classroom.classroom.times[0].start_hour.substr(0, classroom.classroom.times[0].start_hour.length - 1);
-                let finalHour = classroom.classroom.times[0].final_hour.substr(0, classroom.classroom.times[0].final_hour.length - 1);
+        try {
 
-                const startMinutes = new Date(startHour).getMinutes() === 0 ? '00' : new Date(startHour).getMinutes();
-                const finalMinutes = new Date(finalHour).getMinutes() === 0 ? '00' : new Date(finalHour).getMinutes();
-                const data = {
-                    name: classroom.classroom.subject.name,
-                    start_hour: new Date(startHour).getHours() + ':' + startMinutes,
-                    final_hour: new Date(finalHour).getHours() + ':' + finalMinutes
+
+            console.log(date);
+            console.log(date.getDay());
+            console.log(date.getHours())
+            console.log(slots.disciplina.value)
+
+
+            let filter;
+
+            if (slots.disciplina.value !== undefined) {
+                const filter = {
+                    subject: slots.disciplina.value,
+                    weekDay
+                }
+                //time: slots.horario.value,
+
+                const result = await uegenioApi.getClassrooms(filter);
+
+                if (result.status == 404) {
+                    return handlerInput.responseBuilder
+                        .speak(`Não haverá aula em ${weekDay}`)
+                        .reprompt()
+                        .getResponse();
                 }
 
-                classrooms.push(data);
-            })
-        } else {
-            console.log(dataApi.data)
-            dataApi.data.classrooms.forEach(classroom => {
+                const time = new Date("1970-01-01T" + slots.horario.value);
+                let hours = '';
+                let subject;
 
-                let startHour = classroom.times[0].start_hour.substr(0, classroom.times[0].start_hour.length - 1);
-                let finalHour = classroom.times[0].final_hour.substr(0, classroom.times[0].final_hour.length - 1);
+                let text;
 
-                const startMinutes = new Date(startHour).getMinutes() === 0 ? '00' : new Date(startHour).getMinutes();
-                const finalMinutes = new Date(finalHour).getMinutes() === 0 ? '00' : new Date(finalHour).getMinutes();
-                const data = {
-                    name: classroom.subject.name,
-                    start_hour: new Date(startHour).getHours() + ':' + startMinutes,
-                    final_hour: new Date(finalHour).getHours() + ':' + finalMinutes
+                result.forEach(classroom => {
+                    if (slots.horario.value !== undefined) {
+                        classroom.hours.forEach(hour => {
+                            let initHour = new Date("1970-01-01T" + hour.initHour);
+                            let finalHour = new Date("1970-01-01T" + hour.finalHour);
+
+                            if (time >= initHour && time <= finalHour) {
+                                hours = hour.initHour + ' até ' + hour.finalHour;
+                            }
+
+
+                        })
+                        console.log('houasudas d asdhnasudhasudashduasdashud');
+                        console.log(hours);
+                        if (!hours) {
+                            console.log('ENTRA AQUI PELO AMOR DE DEUS')
+                            const disciplina = slots.disciplina.resolutions.resolutionsPerAuthority[0].values[0].value.name ? slots.disciplina.resolutions.resolutionsPerAuthority[0].values[0].value.name : slots.disciplina.value
+                            console.log(disciplina);
+
+                            text = `Não haverá aula de ${disciplina} no período de ${slots.horario.value} horas em ${weekDay}`;
+                        }
+                    } else {
+                        classroom.hours.forEach(hour => {
+                            hours += hour.initHour + ' até ' + hour.finalHour + ', ';
+                        })
+                    }
+
+
+
+                    subject = classroom.nomeSubject;
+                    console.log(subject);
+                })
+
+                if (!text) {
+                    text = `Você tem aula de ${subject} em ${weekDay} de ${hours}`
                 }
 
-                classrooms.push(data);
-            })
+                handlerInput.responseBuilder
+                    .speak(text)
+                    .reprompt()
+                    .getResponse();
+
+                return handlerInput.responseBuilder.getResponse();
+
+            }
+
+
+
+            handlerInput.responseBuilder
+                .speak(`nao cai aqui pfvr`)
+                .reprompt()
+                .getResponse();
+
+            return handlerInput.responseBuilder.getResponse();
+
+        } catch (e) {
+
         }
-
-        console.log(classrooms);
-
-
-        let speechText = `${weekDay} você não tem aulas `;
-        if (classrooms[0]) {
-            speechText = `${weekDay} você tem aulas de `;
-
-            classrooms.forEach(classroom => {
-                speechText += `${classroom.name} de ${classroom.start_hour} até ${classroom.final_hour}, `
-            })
-        } else if (slots.horario.value) {
-            speechText += `as ${slots.horario.value}`
-        }
-
-        console.log(weekDay);
-
-        return handlerInput.responseBuilder
-            .speak(speechText)
-            .reprompt('teste')
-            .getResponse();
     }
+
+
 }
 
 export { HorarioAulasIntentHandler };

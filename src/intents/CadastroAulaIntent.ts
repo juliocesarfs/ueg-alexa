@@ -1,5 +1,4 @@
 import { UegenioApi } from "../api/UegenioApi";
-import { HandlerInput } from 'ask-sdk-core';
 
 
 const uegenioApi = new UegenioApi();
@@ -11,40 +10,70 @@ const CadastroAulaIntentHandler = {
         const { request } = handlerInput.requestEnvelope;
         return request.type === 'IntentRequest' && request.intent.name === 'CadastroAulaIntent';
     },
-    async handle(handlerInput: HandlerInput) {
+    async handle(handlerInput) {
+        try {
 
-        try {/*
-        const { request } = handlerInput.requestEnvelope;
+            const { request } = handlerInput.requestEnvelope;
 
-        const slots = request.intent.slots;
+            const slots = request.intent.slots;
 
-        console.log(slots);
-        const className = slots.disciplina;
 
-        const requestResult = await uegenioApi.registerClass({ className, userId: 'alexa-id' })
+            const className = slots.disciplina.value;
 
-        let text = ''
-        if (requestResult === null) {
-            text = 'Não existe disciplina com esse nome'
-        } else if (requestResult) {
-            text = 'Disciplina cadastrada com sucesso'
-        } else if (!requestResult) {
-            text = 'Ocorreu um erro interno, tente novamente mais tarde'
-        }
-        */
 
-            const question = ' Voce deseja se cadastrar em Banco de Dados 1 ou Banco de dados 2?';
+
+            const classrooms = await uegenioApi.getClassrooms({ subject: className });
+            const student = await uegenioApi.getStudent(handlerInput.requestEnvelope.session.user.userId);
+
+            const dataToSave = {
+                id: student.id,
+                alexaID: student.alexaID,
+                studentsClassrooms: [
+                    {
+                        idClassroom: classrooms[0].id,
+                        idStudent: student.id,
+                        alexaID: student.alexaID,
+                        nomeSubject: classrooms[0].nomeSubject,
+                    }
+                ]
+            }
+
+            const result = await uegenioApi.registerUsersClassrooms(dataToSave);
 
             handlerInput.responseBuilder
-                .speak('speechText')
+                .speak(`Disciplina ${classrooms[0].nomeSubject} cadastrada com sucesso`)
+                .reprompt()
+
             // .listen(question)
 
             //handlerInput.responseBuilder.
 
+
+
+            //const requestResult = await uegenioApi.registerClass({ subjectName: className, alexaId: 'alexa_1212' })
+
+            //let text = ''
+            //console.log(requestResult);
+            /*
+            if (requestResult === null) {
+                text = 'Não existe disciplina com esse nome'
+            } else if (requestResult) {
+                text = 'Disciplina cadastrada com sucesso'
+            } else if (!requestResult) {
+                text = 'Ocorreu um erro interno, tente novamente mais tarde'
+            }
+            */
+        } catch (e) {
+            handlerInput.responseBuilder
+                .speak(e.message)
+                .reprompt()
+
             return handlerInput.responseBuilder.getResponse();
-        } catch (err: any) {
-            console.log(err.message);
         }
+
+
+
+        return handlerInput.responseBuilder.getResponse();
     }
 }
 

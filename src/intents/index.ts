@@ -4,6 +4,8 @@ import { SkillBuilders, DefaultApiClient } from 'ask-sdk-core';
 import { LaunchRequest } from './LaunchIntent';
 import { HorarioAulasIntentHandler } from './HorarioAulasIntent';
 import { CadastroAulaIntentHandler } from './CadastroAulaIntent';
+import { DeleteAulaIntentHandler } from './DeleteAulaIntent';
+import { ConsultaDisciplinaIntent } from './ConsultaDisciplinaIntent';
 
 const createSkill = () => {
     const skillbuilder = SkillBuilders.custom();
@@ -11,6 +13,8 @@ const createSkill = () => {
         LaunchRequest,
         HorarioAulasIntentHandler,
         CadastroAulaIntentHandler,
+        DeleteAulaIntentHandler,
+        ConsultaDisciplinaIntent
         // SessionEndedRequest,
         // HelpIntent,
         // CancelAndStopIntentHandler,
