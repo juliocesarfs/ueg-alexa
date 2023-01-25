@@ -18,8 +18,18 @@ const DeleteAulaIntentHandler = {
             const slots = request.intent.slots;
 
             const className = slots.disciplina.value;
+            console.log(className);
 
-            const classrooms = await uegenioApi.getClassrooms(className);
+            const date = new Date(request.timestamp);
+            date.setMonth(date.getMonth() + 1);
+
+            let day = date.getDate();
+            let month = date.getMonth();
+
+            let filterDate = date.getFullYear() + '-' + month + '-' + day
+
+            const classrooms = await uegenioApi.getClassrooms({ subject: className, date: filterDate });
+
             const student = await uegenioApi.getStudent(handlerInput.requestEnvelope.session.user.userId);
 
             const dataToDelete = {
@@ -27,7 +37,9 @@ const DeleteAulaIntentHandler = {
                 idStudent: student.id
             }
 
-            const result = await uegenioApi.deleteClass(dataToDelete)
+            console.log(dataToDelete);
+
+            const result = await uegenioApi.deleteClass(dataToDelete);
 
             /*
             if (requestResult === null) {
@@ -40,16 +52,23 @@ const DeleteAulaIntentHandler = {
             */
 
 
-            return handlerInput.responseBuilder
+            handlerInput.responseBuilder
                 .speak(`Disciplina ${classrooms[0].nomeSubject} deletada com sucesso`)
-                .repromt()
                 .getResponse();
+
+
+            return handlerInput.responseBuilder.getResponse();
             // .listen(question)
 
             //handlerInput.responseBuilder.
 
         } catch (err: any) {
-            console.log(err.message);
+            handlerInput.responseBuilder
+                .speak(`Disciplina não encontrada`)
+                .getResponse();
+
+
+            return handlerInput.responseBuilder.getResponse();
         }
     }
 }

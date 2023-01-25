@@ -1,3 +1,4 @@
+import { getSimpleSlotValues, getSlotValue } from "ask-sdk-core";
 import { UegenioApi } from "../api/UegenioApi";
 
 const uegenioApi = new UegenioApi();
@@ -10,6 +11,12 @@ weekday[3] = "quarta-feira";
 weekday[4] = "quinta-feira";
 weekday[5] = "sexta-feira";
 weekday[6] = "sábado";
+weekday[0] = "domingo";
+
+interface ClassroomToString {
+    subjectName: string,
+    hoursToString: string,
+}
 
 const HorarioAulasIntentHandler = {
     canHandle(handlerInput) {
@@ -24,31 +31,59 @@ const HorarioAulasIntentHandler = {
         const date = slots.date.value ? new Date(slots.date.value) : new Date(request.timestamp);
 
         const weekDay = slots.date.value ? weekday[date.getDay() + 1] : weekday[date.getDay()];
+        console.log(date.getDay())
 
 
         try {
-
-
             console.log(date);
-            console.log(date.getDay());
-            console.log(date.getHours())
-            console.log(slots.disciplina.value)
 
+            if (slots.date.value) {
+                date.setDate(date.getDate() + 1);
+            }
+            date.setMonth(date.getMonth() + 1);
+            let day = date.getDate();
+            let month = date.getMonth();
+            let filterDate = date.getFullYear() + '-' + month + '-' + day
+            console.log(filterDate)
 
-            let filter;
+            const semester = await uegenioApi.getSemester({ date: filterDate });
+
+            if (semester.status == 404) {
+                handlerInput.responseBuilder
+                    .speak(`Ainda não existem aulas cadastradas nesse semestre atual`)
+                    .reprompt()
+                    .getResponse();
+
+                return handlerInput.responseBuilder.getResponse();
+            }
+
+            const holiday = await uegenioApi.getHoliday({ date: filterDate });
+
+            if (holiday[0]) {
+                handlerInput.responseBuilder
+                    .speak(`Não haverá aula no dia ${filterDate} pois é ${holiday[0].nome}`)
+                    .reprompt()
+                    .getResponse();
+
+                return handlerInput.responseBuilder.getResponse();
+            }
 
             if (slots.disciplina.value !== undefined) {
+                const disciplina = slots.disciplina.resolutions.resolutionsPerAuthority[0].values ? slots.disciplina.resolutions.resolutionsPerAuthority[0].values[0].value.name : slots.disciplina.value;
+
                 const filter = {
-                    subject: slots.disciplina.value,
-                    weekDay
+                    subject: disciplina,
+                    weekDay,
+                    date: filterDate
                 }
                 //time: slots.horario.value,
+
 
                 const result = await uegenioApi.getClassrooms(filter);
 
                 if (result.status == 404) {
                     return handlerInput.responseBuilder
-                        .speak(`Não haverá aula em ${weekDay}`)
+                        .speak(`Não haverá aula de ${disciplina} em ${weekDay}`)
                         .reprompt()
                         .getResponse();
                 }
@@ -73,10 +108,8 @@ const HorarioAulasIntentHandler = {
                         })
 
                         if (!hours) {
-                            const disciplina = slots.disciplina.resolutions.resolutionsPerAuthority[0].values[0].value.name ? slots.disciplina.resolutions.resolutionsPerAuthority[0].values[0].value.name : slots.disciplina.value
-                            console.log(disciplina);
 
-                            text = `Não haverá aula de ${disciplina} no período de ${slots.horario.value} horas em ${weekDay}`;
+                            text = `Não haverá aula de ${classroom.nomeSubject} no período de ${slots.horario.value} horas em ${weekDay}`;
                         }
                     } else {
                         classroom.hours.forEach(hour => {
@@ -101,19 +134,108 @@ const HorarioAulasIntentHandler = {
 
                 return handlerInput.responseBuilder.getResponse();
 
+            } else {
+                const student = await uegenioApi.getStudent(handlerInput.requestEnvelope.session.user.userId);
+
+                const filter = {
+                    weekDay,
+                    idStudent: student.id,
+                    date: filterDate
+                }
+
+                const result = await uegenioApi.getStudentsClassrooms(filter);
+                console.log(result);
+
+                if (result.status == 404) {
+                    return handlerInput.responseBuilder
+                        .speak(`Não haverá aula em ${weekDay}`)
+                        .reprompt()
+                        .getResponse();
+                }
+
+                const time = new Date("1970-01-01T" + slots.horario.value);
+                let hours = '';
+
+                let classroomsToStringList: ClassroomToString[] = [];
+                let text;
+
+                result.forEach(classroom => {
+                    if (slots.horario.value !== undefined) {
+                        classroom.hours.forEach(hour => {
+                            let initHour = new Date("1970-01-01T" + hour.initHour);
+                            let finalHour = new Date("1970-01-01T" + hour.finalHour);
+
+                            if (time >= initHour && time <= finalHour) {
+                                hours = hour.initHour + ' até ' + hour.finalHour;
+
+                                const classroomToString: ClassroomToString = {
+                                    subjectName: classroom.nomeSubject,
+                                    hoursToString: hours
+                                }
+
+                                classroomsToStringList.push(classroomToString);
+                            }
+
+
+                        })
+
+                        if (!hours) {
+
+                            text = `Não haverá aula no período de ${slots.horario.value} horas em ${weekDay}`;
+                        }
+                    } else {
+                        let hoursClassroom = '';
+                        classroom.hours.forEach(hour => {
+
+                            hoursClassroom += hour.initHour + ' até ' + hour.finalHour + ', ';
+
+
+                        })
+
+                        const classroomToString: ClassroomToString = {
+                            subjectName: classroom.nomeSubject,
+                            hoursToString: hoursClassroom
+                        }
+
+                        classroomsToStringList.push(classroomToString);
+                        hoursClassroom = '';
+                    }
+                })
+
+                console.log(classroomsToStringList);
+
+                if (!text) {
+
+                    text = 'Você tem aula de '
+                    classroomsToStringList.forEach(classroom => {
+                        text += classroom.subjectName + ' de ' + classroom.hoursToString;
+                    })
+
+                    console.log(text);
+                    //text = `Você tem aula de ${subject} em ${weekDay} de ${hours}`
+                }
+
+                handlerInput.responseBuilder
+                    .speak(text)
+                    .reprompt()
+                    .getResponse();
+
+                return handlerInput.responseBuilder.getResponse();
+
             }
 
 
 
+
+
+        } catch (e) {
+            console.log(e)
             handlerInput.responseBuilder
-                .speak(`nada`)
+                .speak('Ocorreu um erro interno no servidor, tente novamente mais tarde')
                 .reprompt()
                 .getResponse();
 
             return handlerInput.responseBuilder.getResponse();
-
-        } catch (e) {
-
         }
     }
 

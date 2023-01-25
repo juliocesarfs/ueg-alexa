@@ -19,10 +19,26 @@ const CadastroAulaIntentHandler = {
 
 
             const className = slots.disciplina.value;
+            const date = new Date(request.timestamp);
+            date.setMonth(date.getMonth() + 1);
+
+            let day = date.getDate();
+            let month = date.getMonth();
+
+            let filterDate = date.getFullYear() + '-' + month + '-' + day
 
 
 
-            const classrooms = await uegenioApi.getClassrooms({ subject: className });
+            const classrooms = await uegenioApi.getClassrooms({ subject: className, date: filterDate });
+            console.log(classrooms)
+
+            if (classrooms.status === 404) {
+                handlerInput.responseBuilder
+                    .speak(`Não encontrei disciplina com o nome ${className}`)
+                    .reprompt()
+
+                return handlerInput.responseBuilder.getResponse();
+            }
             const student = await uegenioApi.getStudent(handlerInput.requestEnvelope.session.user.userId);
 
             const dataToSave = {
@@ -64,8 +80,9 @@ const CadastroAulaIntentHandler = {
             }
             */
         } catch (e) {
+            console.log(e)
             handlerInput.responseBuilder
-                .speak(e.message)
+                .speak('ocorreu um erro interno no servidor, tente novamente mais tarde')
                 .reprompt()
 
             return handlerInput.responseBuilder.getResponse();

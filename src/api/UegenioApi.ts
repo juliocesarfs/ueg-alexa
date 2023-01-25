@@ -3,7 +3,7 @@ import axios from 'axios'
 class UegenioApi {
 
     api = axios.create({
-        baseURL: 'http://localhost:8081/modelo-api/api/v1'
+        baseURL: 'https://uegenio-api2.herokuapp.com/modelo-api/api/v1'
     })
 
 
@@ -14,6 +14,64 @@ class UegenioApi {
             result = await this.api({
                 method: 'get',
                 url: '/classroom/filtro',
+                params: {
+                    ...filter
+                },
+                validateStatus: () => true
+            });
+        } catch (e) {
+
+        }
+
+        return result.data;
+    }
+
+
+    async getHoliday(filter: any) {
+        let result;
+
+        try {
+            result = await this.api({
+                method: 'get',
+                url: '/holiday/filtro',
+                params: {
+                    ...filter
+                },
+                validateStatus: () => true
+            });
+        } catch (e) {
+
+        }
+
+        return result.data;
+    }
+
+    async getSemester(filter: any) {
+        let result;
+
+        try {
+            result = await this.api({
+                method: 'get',
+                url: '/semester/filtro',
+                params: {
+                    ...filter
+                },
+                validateStatus: () => true
+            });
+        } catch (e) {
+
+        }
+
+        return result.data;
+    }
+
+    async getStudentsClassrooms(filter: any) {
+        let result;
+
+        try {
+            result = await this.api({
+                method: 'get',
+                url: '/studentsClassrooms/filtro',
                 params: {
                     ...filter
                 },
@@ -94,16 +152,22 @@ class UegenioApi {
         return result.data;
     }
 
-    async getSubjectSolicitation(filter: any) {
-        const result = await this.api({
-            method: 'get',
-            url: "/users",
-            data: {
-                ...filter
-            }
-        });
+    async getSolicitation(filter: any) {
+        let result;
+        try {
+            result = await this.api({
+                method: 'get',
+                url: `/solicitation/`,
+                data: {
+                    ...filter
+                },
+                validateStatus: () => true
+            });
+        } catch (e) {
 
-        return result;
+        }
+
+        return result.data;
     }
 
 }
