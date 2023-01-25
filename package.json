@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "set GOOGLE_APPLICATION_CREDENTIALS=C:\\dev\\ueg-alexa\\src\\config\\botueg-jntg-12d8fd5e0be6.json&& ts-node-dev --transpile-only --ignore-watch node_modules --respawn src/server.ts",
-    "start": "node src/server.ts"
+    "start": "ts-node src/server.ts"
   },
   "devDependencies": {
     "ts-node-dev": "^1.1.8",
