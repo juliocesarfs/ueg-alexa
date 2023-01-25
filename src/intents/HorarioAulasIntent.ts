@@ -38,7 +38,7 @@ const HorarioAulasIntentHandler = {
             console.log(date);
 
             if (slots.date.value) {
-                date.setDate(date.getDate() + 1);
+                date.setDate(date.getDate());
             }
             date.setMonth(date.getMonth() + 1);
             let day = date.getDate();
