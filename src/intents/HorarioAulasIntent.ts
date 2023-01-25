@@ -30,7 +30,7 @@ const HorarioAulasIntentHandler = {
 
         const date = slots.date.value ? new Date(slots.date.value) : new Date(request.timestamp);
 
-        const weekDay = slots.date.value ? weekday[date.getDay() + 1] : weekday[date.getDay()];
+        const weekDay = slots.date.value ? weekday[date.getDay()] : weekday[date.getDay()];
         console.log(date.getDay())
 
 
