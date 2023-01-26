@@ -37,33 +37,37 @@ const ConsultaDisciplinaIntent = {
             });
 
 
-            if (requestResult.status == 404) {
+            if (requestResult.data.status == 404) {
                 handlerInput.responseBuilder
                     .speak('Não encontrei informações para a disciplina ' + className);
 
                 return handlerInput.responseBuilder.getResponse();
             }
 
-            let text;
-            if (solicitation === 'frequencia') {
-                text = `Você possui um total de ${requestResult.faltas} faltas na disciplina ${requestResult.subject}. `;
-                if (requestResult.faltas < 16) {
-                    text += `Você só pode faltar mais ${16 - requestResult.faltas}`
-                } else if (requestResult.faltas == 16) {
-                    text += `Você não pode faltar mais nenhuma aula`
-                } else {
-                    text += 'Você ultrapassou o limite de faltas'
-                }
-            } else if (solicitation === 'notas') {
-                if (requestResult.nota_1va != undefined) {
-                    text = `Na disciplina ${requestResult.subject}, sua nota do primeiro bimestre é ${requestResult.nota_1va}, `;
 
-                    if (requestResult.nota_2va != undefined) {
-                        text += `do segundo bimestre ${requestResult.nota_2va}. Sua média final é ${requestResult.media_final}`
+            let text;
+            if (requestResult.data) {
+                if (solicitation === 'frequencia') {
+                    text = `Você possui um total de ${requestResult.data.faltas} faltas na disciplina ${requestResult.data.subject}. `;
+                    if (requestResult.data.faltas < 16) {
+                        text += `Você só pode faltar mais ${16 - requestResult.data.faltas}`
+                    } else if (requestResult.data.faltas == 16) {
+                        text += `Você não pode faltar mais nenhuma aula`
+                    } else {
+                        text += 'Você ultrapassou o limite de faltas'
                     }
-                } else {
-                    text = `Ainda não foram definidas suas notas da disciplina ${requestResult.subject} neste semestre`
+                } else if (solicitation === 'notas') {
+                    if (requestResult.data.nota_1va != undefined) {
+                        text = `Na disciplina ${requestResult.data.subject}, sua nota do primeiro bimestre é ${requestResult.data.nota_1va}, `;
+
+                        if (requestResult.data.nota_2va != undefined) {
+                            text += `do segundo bimestre ${requestResult.data.nota_2va}. Sua média final é ${requestResult.data.media_final}`
+                        }
+                    } else {
+                        text = `Ainda não foram definidas suas notas da disciplina ${requestResult.data.subject} neste semestre`
+                    }
                 }
+
             } else {
                 text = 'Não foi possível realizar essa solicitação'
             }

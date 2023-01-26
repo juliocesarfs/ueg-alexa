@@ -167,7 +167,7 @@ class UegenioApi {
 
         }
 
-        return result.data;
+        return result;
     }
 
 }
