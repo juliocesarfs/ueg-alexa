@@ -158,8 +158,9 @@ const HorarioAulasIntentHandler = {
                 let classroomsToStringList: ClassroomToString[] = [];
                 let text;
 
-                this.orderByDate(result)
+
                 result.forEach(classroom => {
+                    this.orderByDate(classroom.hours);
                     if (slots.horario.value !== undefined) {
                         classroom.hours.forEach(hour => {
                             let initHour = new Date("1970-01-01T" + hour.initHour);
@@ -241,15 +242,11 @@ const HorarioAulasIntentHandler = {
         }
     },
 
-    orderByDate(classroomList: any[]) {
-        classroomList.sort((a, b) => {
+    orderByDate(hoursList: any[]) {
+        hoursList.sort((a, b) => {
             return new Date("1970-01-01T" + b.initHour).valueOf() - new Date("1970-01-01T" + a.initHour).valueOf();
         })
     }
-
-
-
-
 }
 
 
