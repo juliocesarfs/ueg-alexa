@@ -39,7 +39,7 @@ const ConsultaDisciplinaIntent = {
 
             if (requestResult.data.status == 404) {
                 handlerInput.responseBuilder
-                    .speak('Não encontrei informações para a disciplina ' + className);
+                    .speak('Não encontrei informações para a disciplina ' + className)
 
                 return handlerInput.responseBuilder.getResponse();
             }
@@ -88,6 +88,7 @@ const ConsultaDisciplinaIntent = {
 
             handlerInput.responseBuilder
                 .speak(text)
+                .reprompt()
             // .listen(question)
 
             //handlerInput.responseBuilder.
@@ -96,7 +97,8 @@ const ConsultaDisciplinaIntent = {
         } catch (err: any) {
             console.log(err)
             handlerInput.responseBuilder
-                .speak('Não foi possível realizar essa solicitação');
+                .speak('Não foi possível realizar essa solicitação')
+                .reprompt()
 
             return handlerInput.responseBuilder.getResponse();
         }
