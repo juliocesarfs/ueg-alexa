@@ -40,6 +40,7 @@ const ConsultaDisciplinaIntent = {
             if (requestResult.data.status == 404) {
                 handlerInput.responseBuilder
                     .speak('Não encontrei informações para a disciplina ' + className)
+                    .reprompt()
 
                 return handlerInput.responseBuilder.getResponse();
             }
