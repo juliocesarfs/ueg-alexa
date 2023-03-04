@@ -12,7 +12,6 @@ const HelloWorldIntentHandler = {
     },
     handle(handlerInput) {
         const speakOutput = 'Hello World!';
-        console.log('sexozinho')
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
