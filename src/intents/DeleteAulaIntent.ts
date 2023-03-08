@@ -39,7 +39,7 @@ const DeleteAulaIntentHandler = {
 
             console.log(dataToDelete);
 
-            const result = await uegenioApi.deleteClass(dataToDelete);
+            await uegenioApi.deleteClass(dataToDelete);
 
             /*
             if (requestResult === null) {
@@ -54,7 +54,7 @@ const DeleteAulaIntentHandler = {
 
             handlerInput.responseBuilder
                 .speak(`Disciplina ${classrooms[0].nomeSubject} deletada com sucesso`)
-                .getResponse();
+                .reprompt()
 
 
             return handlerInput.responseBuilder.getResponse();
@@ -65,7 +65,7 @@ const DeleteAulaIntentHandler = {
         } catch (err: any) {
             handlerInput.responseBuilder
                 .speak(`Disciplina não encontrada`)
-                .getResponse();
+                .reprompt()
 
 
             return handlerInput.responseBuilder.getResponse();

@@ -1,5 +1,6 @@
 import { getSimpleSlotValues, getSlotValue } from "ask-sdk-core";
 import { UegenioApi } from "../api/UegenioApi";
+import { format } from "date-fns";
 
 const uegenioApi = new UegenioApi();
 
@@ -30,23 +31,20 @@ const HorarioAulasIntentHandler = {
 
         const date = slots.date.value ? new Date(slots.date.value) : new Date(request.timestamp);
 
-        const weekDay = slots.date.value ? weekday[date.getDay() + 1] : weekday[date.getDay()];
-        console.log(date.getDay())
+        const dateFormat = format(new Date(date), 'yyyy-MM-dd')
+        console.log('date format', dateFormat);
+
+        const weekDay = slots.date.value ? weekday[date.getDay()] : weekday[date.getDay()];
 
 
         try {
-            console.log(date);
 
             if (slots.date.value) {
-                date.setDate(date.getDate() + 1);
+                date.setDate(date.getDate());
             }
-            date.setMonth(date.getMonth() + 1);
-            let day = date.getDate();
-            let month = date.getMonth();
-            let filterDate = date.getFullYear() + '-' + month + '-' + day
-            console.log(filterDate)
 
-            const semester = await uegenioApi.getSemester({ date: filterDate });
+
+            const semester = await uegenioApi.getSemester({ date: dateFormat });
 
             if (semester.status == 404) {
                 handlerInput.responseBuilder
@@ -57,13 +55,14 @@ const HorarioAulasIntentHandler = {
                 return handlerInput.responseBuilder.getResponse();
             }
 
-            const holiday = await uegenioApi.getHoliday({ date: filterDate });
+            const holiday = await uegenioApi.getHoliday({ date: dateFormat });
+            console.log('asdasdasd')
+            console.log(holiday);
 
             if (holiday[0]) {
                 handlerInput.responseBuilder
-                    .speak(`Não haverá aula no dia ${filterDate} pois é ${holiday[0].nome}`)
+                    .speak(`Não haverá aula no dia ${dateFormat} pois é ${holiday[0].nome}`)
                     .reprompt()
-                    .getResponse();
 
                 return handlerInput.responseBuilder.getResponse();
             }
@@ -74,7 +73,7 @@ const HorarioAulasIntentHandler = {
                 const filter = {
                     subject: disciplina,
                     weekDay,
-                    date: filterDate
+                    date: dateFormat
                 }
                 //time: slots.horario.value,
 
@@ -140,7 +139,7 @@ const HorarioAulasIntentHandler = {
                 const filter = {
                     weekDay,
                     idStudent: student.id,
-                    date: filterDate
+                    date: dateFormat
                 }
 
                 const result = await uegenioApi.getStudentsClassrooms(filter);
@@ -158,6 +157,7 @@ const HorarioAulasIntentHandler = {
 
                 let classroomsToStringList: ClassroomToString[] = [];
                 let text;
+
 
                 result.forEach(classroom => {
                     if (slots.horario.value !== undefined) {
@@ -204,6 +204,8 @@ const HorarioAulasIntentHandler = {
 
                 console.log(classroomsToStringList);
 
+
+
                 if (!text) {
 
                     text = 'Você tem aula de '
@@ -241,5 +243,6 @@ const HorarioAulasIntentHandler = {
 
 
 }
+
 
 export { HorarioAulasIntentHandler };

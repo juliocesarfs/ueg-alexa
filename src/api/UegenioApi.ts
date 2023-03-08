@@ -1,9 +1,13 @@
 import axios from 'axios'
+require('dotenv').config();
+
 
 class UegenioApi {
 
+
+
     api = axios.create({
-        baseURL: 'https://uegenio-api2.herokuapp.com/modelo-api/api/v1'
+        baseURL: process.env.baseURL || 'http://localhost:5001'
     })
 
 
@@ -167,7 +171,7 @@ class UegenioApi {
 
         }
 
-        return result.data;
+        return result;
     }
 
 }

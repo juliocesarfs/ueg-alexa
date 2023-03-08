@@ -7,7 +7,7 @@ const alexaApp = express();
 
 const skill = createSkill();
 
-const adapter = new ExpressAdapter(skill, false, false);
+const adapter = new ExpressAdapter(skill, true, false);
 
 alexaApp.post('/', adapter.getRequestHandlers());
 

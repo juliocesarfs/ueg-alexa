@@ -6,6 +6,8 @@ import { HorarioAulasIntentHandler } from './HorarioAulasIntent';
 import { CadastroAulaIntentHandler } from './CadastroAulaIntent';
 import { DeleteAulaIntentHandler } from './DeleteAulaIntent';
 import { ConsultaDisciplinaIntent } from './ConsultaDisciplinaIntent';
+import { CancelAndStopIntent } from './CancelAndStopIntent';
+import { UnhandledRequestHandler } from './UnhandledRequestHandler';
 
 const createSkill = () => {
     const skillbuilder = SkillBuilders.custom();
@@ -14,11 +16,11 @@ const createSkill = () => {
         HorarioAulasIntentHandler,
         CadastroAulaIntentHandler,
         DeleteAulaIntentHandler,
-        ConsultaDisciplinaIntent
+        ConsultaDisciplinaIntent,
         // SessionEndedRequest,
         // HelpIntent,
-        // CancelAndStopIntentHandler,
-        // UnhandledIntent,
+        CancelAndStopIntent,
+        UnhandledRequestHandler,
     )
         .withApiClient(new DefaultApiClient())
         .withCustomUserAgent('UEGbot/v1')
